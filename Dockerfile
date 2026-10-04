@@ -1,5 +1,6 @@
+ARG BASE_IMAGE_PREFIX=public.ecr.aws/docker/library
 # Node dependencies stage
-FROM public.ecr.aws/docker/library/node:22-alpine AS frontend-dependencies
+FROM ${BASE_IMAGE_PREFIX}/node:22-alpine AS frontend-dependencies
 WORKDIR /app
 
 # Install pnpm 10 (latest stable, works reliably in Alpine)
@@ -10,7 +11,7 @@ COPY frontend/package.json frontend/pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
 # Build Nuxt (frontend) stage
-FROM public.ecr.aws/docker/library/node:22-alpine AS frontend-builder
+FROM ${BASE_IMAGE_PREFIX}/node:22-alpine AS frontend-builder
 WORKDIR /app
 
 # Install pnpm 10 (latest stable)
@@ -22,7 +23,7 @@ COPY --from=frontend-dependencies /app/node_modules ./node_modules
 RUN pnpm build
 
 # Go dependencies stage
-FROM public.ecr.aws/docker/library/golang:alpine AS builder-dependencies
+FROM ${BASE_IMAGE_PREFIX}/golang:alpine AS builder-dependencies
 WORKDIR /go/src/app
 
 # Copy go.mod and go.sum for better caching
@@ -30,7 +31,7 @@ COPY ./backend/go.mod ./backend/go.sum ./
 RUN go mod download
 
 # Build API stage
-FROM public.ecr.aws/docker/library/golang:alpine AS builder
+FROM ${BASE_IMAGE_PREFIX}/golang:alpine AS builder
 ARG TARGETOS
 ARG TARGETARCH
 ARG BUILD_TIME
@@ -66,7 +67,7 @@ RUN \
     fi
 
 # Production stage
-FROM public.ecr.aws/docker/library/alpine:latest
+FROM ${BASE_IMAGE_PREFIX}/alpine:latest
 ENV HBOX_MODE=production
 ENV HBOX_STORAGE_CONN_STRING=file:///?no_tmp_dir=true
 ENV HBOX_STORAGE_PREFIX_PATH=data
