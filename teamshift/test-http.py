@@ -14,7 +14,7 @@ def req(method,path,body=None,token=None,tenant=None,raw=None,ctype=None):
   with urllib.request.urlopen(urllib.request.Request(BASE+path,data=data,headers=headers,method=method),timeout=30) as r:code=r.status;data=r.read()
  except urllib.error.HTTPError as e:code=e.code;data=e.read()
  try:parsed=json.loads(data)
- except json.JSONDecodeError:parsed=None
+ except (json.JSONDecodeError,UnicodeDecodeError):parsed=None
  return code,parsed,data
 
 def success(result,label):
@@ -66,10 +66,17 @@ success(req('PUT','/groups',dict(name='TEST ONLY verified household A',currency=
 assert req('GET','/entities/'+bin1['id'])[0] in (401,403)
 # Session query auth must be refused. Do not emit the URL or token in logs.
 assert req('GET','/entities/'+bin1['id']+'?access_token='+urllib.parse.quote(a.removeprefix('Bearer ')))[0] in (401,403)
-text='HB.import_ref,HB.name,HB.location,HB.quantity,HB.description,HB.field.bin_id\nfixture-bin-B002,B002 fixture bin,Fixture Apartment / Primary closet,1,TEST ONLY imported bin,B002\n'
-boundary='fixture-'+uuid.uuid4().hex
-raw=(f'--{boundary}\r\nContent-Disposition: form-data; name="csv"; filename="fixture.csv"\r\nContent-Type: text/csv\r\n\r\n'+text+f'\r\n--{boundary}--\r\n').encode()
-for _ in range(2):success(req('POST','/entities/import',token=a,tenant=ga,raw=raw,ctype='multipart/form-data; boundary='+boundary),'CSV import')
-listed=success(req('GET','/entities?limit=100',token=a,tenant=ga),'list after import');items=entities(listed);assert sum(x.get('name')=='B002 fixture bin' for x in items)==1,'CSV duplicate'
+imported_id=None
+for description in ['TEST ONLY imported bin','TEST ONLY updated bin contents']:
+ text='HB.import_ref,HB.name,HB.location,HB.quantity,HB.description,HB.field.bin_id\nfixture-bin-B002,B002 fixture bin,Fixture Apartment / Primary closet,1,'+description+',B002\n'
+ boundary='fixture-'+uuid.uuid4().hex
+ raw=(f'--{boundary}\r\nContent-Disposition: form-data; name="csv"; filename="fixture.csv"\r\nContent-Type: text/csv\r\n\r\n'+text+f'\r\n--{boundary}--\r\n').encode()
+ success(req('POST','/entities/import',token=a,tenant=ga,raw=raw,ctype='multipart/form-data; boundary='+boundary),'CSV import')
+ listed=success(req('GET','/entities?limit=100',token=a,tenant=ga),'list after import');items=entities(listed)
+ matches=[x for x in items if x.get('name')=='B002 fixture bin'];assert len(matches)==1,'CSV duplicate'
+ current=success(req('GET','/entities/'+matches[0]['id'],token=a,tenant=ga),'imported bin readback')
+ assert current['description']==description,'Import must update actual contents'
+ if imported_id is not None:assert current['id']==imported_id,'Import must retain immutable item URL'
+ imported_id=current['id']
 other=success(req('GET','/entities?limit=100',token=b,tenant=gb),'B listing');assert 'B002 fixture bin' not in json.dumps(other) and marker not in json.dumps(other)
-print('PASS: two-household membership/object isolation; invited content access; member-admin refusal; owner positive; auth/query refusal; CSV repeat import without duplicate')
+print('PASS: two-household membership/object isolation; invited content access; member-admin refusal; owner positive; auth/query refusal; native QR decoding; CSV update without duplicate or changed item ID')

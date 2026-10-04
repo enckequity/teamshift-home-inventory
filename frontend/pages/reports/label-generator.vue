@@ -2,6 +2,7 @@
   import { useI18n } from "vue-i18n";
   import DOMPurify from "dompurify";
   import { route } from "../../lib/api/base";
+  import { labelDestination } from "~/lib/label-destination";
   import { Toaster, toast } from "@/components/ui/sonner";
   import { Separator } from "@/components/ui/separator";
   import { Button } from "@/components/ui/button";
@@ -212,28 +213,20 @@
     return aidStr;
   }
 
-  function getQRCodeUrl(assetID: string): string {
-    let origin = displayProperties.baseURL.trim();
-
-    // remove trailing slash
-    if (origin.endsWith("/")) {
-      origin = origin.slice(0, -1);
-    }
-
-    const data = `${origin}/a/${assetID}`;
-
+  function getQRCodeUrl(assetID: string, entityID?: string): string {
+    const data = labelDestination(displayProperties.baseURL, assetID, entityID);
     return route(`/qrcode`, { data: encodeURIComponent(data) });
   }
 
   function getItem(
     n: number,
-    item: { assetId: string; name: string; parent?: { name: string } | null } | null
+    item: { id: string; assetId: string; name: string; parent?: { name: string } | null } | null
   ): LabelData {
     // format n into - seperated string with leading zeros
     const assetID = fmtAssetID(item?.assetId ?? n + 1);
 
     return {
-      url: getQRCodeUrl(assetID),
+      url: getQRCodeUrl(assetID, item?.id),
       assetID: item?.assetId ?? assetID,
       name: item?.name ?? labelBlankLine,
       // Since the entities refactor an item's whereabouts is its parent
