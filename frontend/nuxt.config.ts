@@ -84,8 +84,8 @@ export default defineNuxtConfig({
       enabled: false,
     },
     manifest: {
-      name: "Homebox",
-      short_name: "Homebox",
+      name: "TeamShift Home Inventory",
+      short_name: "TeamShift Home Inventory",
       description: "Home Inventory App",
       theme_color: "#5b7f67",
       start_url: "/home",

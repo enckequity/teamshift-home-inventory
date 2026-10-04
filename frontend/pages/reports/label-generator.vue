@@ -17,7 +17,7 @@
     layout: false,
   });
   useHead({
-    title: "HomeBox | " + t("reports.label_generator.title"),
+    title: "TeamShift | " + t("reports.label_generator.title"),
   });
 
   const api = useUserApi();
@@ -280,7 +280,7 @@
   const getHomeBoxLineText = computed(() => {
     return (item: LabelData): string | null => {
       if (replaceHomeboxBehavior.value === BEHAVIOR_SHOW) {
-        return "HomeBox";
+        return "TeamShift";
       }
       if (replaceHomeboxBehavior.value === BEHAVIOR_ALWAYS_REPLACE) {
         return replaceHomeboxText.value;
@@ -407,7 +407,7 @@
   <div class="print:hidden">
     <Toaster />
     <div class="container prose mx-auto max-w-4xl p-4 pt-6">
-      <h1>HomeBox {{ $t("reports.label_generator.title") }}</h1>
+      <h1>TeamShift {{ $t("reports.label_generator.title") }}</h1>
       <p>
         {{ $t("reports.label_generator.instruction_1") }}
       </p>

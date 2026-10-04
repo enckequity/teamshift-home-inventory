@@ -11,7 +11,7 @@
   const { t } = useI18n();
 
   useHead({
-    title: "HomeBox | " + t("index.forgot_password_title"),
+    title: "TeamShift | " + t("index.forgot_password_title"),
   });
 
   definePageMeta({
