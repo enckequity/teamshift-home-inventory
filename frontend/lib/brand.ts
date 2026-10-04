@@ -1,3 +1,5 @@
-// TeamShift presentation only: preserve technical IDs, URLs and user data.
+/** Change translated display names while preserving URLs and persisted identifiers. */
 export const brandMessage = (message: string): string =>
-  message.replace(/(?<![\w/.-])homebox(?![\w/.-])/gi, "TeamShift");
+  message
+    .replace(/(?<![\w/.-])Home[Bb]ox(?=-)/g, "TeamShift")
+    .replace(/(?<![\w/.-])homebox(?![\w/-]|\.(?=[\w-]))/gi, "TeamShift");
