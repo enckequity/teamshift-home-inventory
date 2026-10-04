@@ -1,5 +1,7 @@
 """Disposable local HTTP acceptance; never run against a real household database."""
-import json,secrets,urllib.request,urllib.error,uuid,datetime,csv,io
+import json,secrets,urllib.request,urllib.error,urllib.parse,uuid,datetime,csv,io
+from PIL import Image
+import zxingcpp
 BASE='http://127.0.0.1:8770/api/v1'
 def req(method,path,body=None,token=None,tenant=None,raw=None,ctype=None):
  headers={}
@@ -42,6 +44,11 @@ la,ia=types(a,ga);lb,ib=types(b,gb)
 closet=success(req('POST','/entities',dict(name='TEST ONLY closet A',quantity=1,entityTypeId=la),a,ga),'create closet')
 marker='TEST ONLY private A marker '+uuid.uuid4().hex
 bin1=success(req('POST','/entities',dict(name='B001 fixture bin',quantity=1,parentId=closet['id'],entityTypeId=ia,description=marker),a,ga),'create bin')
+qr_target='http://127.0.0.1:8770/item/'+bin1['id']
+qr= req('GET','/qrcode?data='+urllib.parse.quote(qr_target,safe=''),token=a,tenant=ga)
+assert qr[0]==200 and qr[2].startswith(b'\xff\xd8'),('QR generation',qr[0])
+decoded=zxingcpp.read_barcode(Image.open(io.BytesIO(qr[2])))
+assert decoded is not None and decoded.text==qr_target,'Native QR must decode to stable entity URL without credentials'
 expiry=(datetime.datetime.now(datetime.timezone.utc)+datetime.timedelta(hours=1)).isoformat()
 invite=success(req('POST','/groups/invitations',dict(uses=1,expiresAt=expiry),a,ga),'invite')
 member=register('member-a',invite['token'])

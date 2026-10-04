@@ -12,4 +12,4 @@ Licensed under the retained [AGPL-3.0 license](LICENSE). Source for this modifie
 
 ## Verification
 
-Run `node --experimental-strip-types teamshift/test-branding.mjs` for presentation checks. Build the official Dockerfile, start a disposable database on `127.0.0.1:8770`, and run `python3 teamshift/test-http.py` for two-household access, member permissions and repeat-import acceptance. The HTTP fixture creates synthetic accounts and data; never point it at a live household database.
+Run `node --experimental-strip-types teamshift/test-branding.mjs` for presentation checks. Build the official Dockerfile, start a disposable database on `127.0.0.1:8770`, and run `uv run --with-requirements teamshift/test-requirements.txt --python 3.12 teamshift/test-http.py` for two-household access, member permissions and repeat-import acceptance and native QR decoding. The HTTP fixture creates synthetic accounts and data; never point it at a live household database.
