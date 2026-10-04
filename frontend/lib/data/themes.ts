@@ -37,7 +37,7 @@ export type ThemeOption = {
 
 export const themes: ThemeOption[] = [
   {
-    label: "Homebox",
+    label: "TeamShift",
     value: "homebox",
   },
   {
