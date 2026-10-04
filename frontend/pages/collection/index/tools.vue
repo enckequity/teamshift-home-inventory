@@ -199,7 +199,7 @@
     middleware: ["auth"],
   });
   useHead({
-    title: "HomeBox | " + t("collection.tabs.tools"),
+    title: "TeamShift | " + t("collection.tabs.tools"),
   });
 
   const { openDialog } = useDialog();

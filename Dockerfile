@@ -1,5 +1,6 @@
+ARG BASE_IMAGE_PREFIX=public.ecr.aws/docker/library
 # Node dependencies stage
-FROM public.ecr.aws/docker/library/node:22-alpine AS frontend-dependencies
+FROM ${BASE_IMAGE_PREFIX}/node:22-alpine AS frontend-dependencies
 WORKDIR /app
 
 # Install pnpm 10 (latest stable, works reliably in Alpine)
@@ -10,7 +11,7 @@ COPY frontend/package.json frontend/pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
 # Build Nuxt (frontend) stage
-FROM public.ecr.aws/docker/library/node:22-alpine AS frontend-builder
+FROM ${BASE_IMAGE_PREFIX}/node:22-alpine AS frontend-builder
 WORKDIR /app
 
 # Install pnpm 10 (latest stable)
@@ -22,7 +23,7 @@ COPY --from=frontend-dependencies /app/node_modules ./node_modules
 RUN pnpm build
 
 # Go dependencies stage
-FROM public.ecr.aws/docker/library/golang:alpine AS builder-dependencies
+FROM ${BASE_IMAGE_PREFIX}/golang:alpine AS builder-dependencies
 WORKDIR /go/src/app
 
 # Copy go.mod and go.sum for better caching
@@ -30,7 +31,7 @@ COPY ./backend/go.mod ./backend/go.sum ./
 RUN go mod download
 
 # Build API stage
-FROM public.ecr.aws/docker/library/golang:alpine AS builder
+FROM ${BASE_IMAGE_PREFIX}/golang:alpine AS builder
 ARG TARGETOS
 ARG TARGETARCH
 ARG BUILD_TIME
@@ -53,8 +54,8 @@ COPY ./backend .
 RUN rm -rf ./app/api/public
 COPY --from=frontend-builder /app/.output/public ./app/api/static/public
 
-# Use cache for Go build artifacts
-RUN --mount=type=cache,target=/root/.cache/go-build \
+# Compile with the canonical build worker (no BuildKit-only mount syntax).
+RUN \
     if [ "$TARGETARCH" = "arm" ] || [ "$TARGETARCH" = "riscv64" ];  \
     then echo "nodynamic" $TARGETOS $TARGETARCH; CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build \
         -ldflags "-s -w -X main.commit=$COMMIT -X main.buildTime=$BUILD_TIME -X main.version=$VERSION" \
@@ -66,7 +67,7 @@ RUN --mount=type=cache,target=/root/.cache/go-build \
     fi
 
 # Production stage
-FROM public.ecr.aws/docker/library/alpine:latest
+FROM ${BASE_IMAGE_PREFIX}/alpine:latest
 ENV HBOX_MODE=production
 ENV HBOX_STORAGE_CONN_STRING=file:///?no_tmp_dir=true
 ENV HBOX_STORAGE_PREFIX_PATH=data
@@ -82,8 +83,8 @@ COPY --from=builder /go/bin/api /app
 RUN chmod +x /app/api
 
 # Labels and configuration for the final image
-LABEL Name=homebox Version=0.0.1
-LABEL org.opencontainers.image.source="https://github.com/sysadminsmedia/homebox"
+LABEL Name=teamshift-home-inventory Version=0.0.1
+LABEL org.opencontainers.image.source="https://github.com/enckequity/teamshift-home-inventory"
 
 # Expose necessary ports for Homebox
 EXPOSE 7745

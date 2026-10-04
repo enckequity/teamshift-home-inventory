@@ -10,7 +10,7 @@
     middleware: ["auth"],
   });
   useHead({
-    title: "HomeBox | " + t("menu.maintenance"),
+    title: "TeamShift | " + t("menu.maintenance"),
   });
 </script>
 

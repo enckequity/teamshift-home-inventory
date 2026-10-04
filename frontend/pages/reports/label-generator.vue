@@ -2,6 +2,7 @@
   import { useI18n } from "vue-i18n";
   import DOMPurify from "dompurify";
   import { route } from "../../lib/api/base";
+  import { labelDestination } from "~/lib/label-destination";
   import { Toaster, toast } from "@/components/ui/sonner";
   import { Separator } from "@/components/ui/separator";
   import { Button } from "@/components/ui/button";
@@ -17,7 +18,7 @@
     layout: false,
   });
   useHead({
-    title: "HomeBox | " + t("reports.label_generator.title"),
+    title: "TeamShift | " + t("reports.label_generator.title"),
   });
 
   const api = useUserApi();
@@ -212,28 +213,20 @@
     return aidStr;
   }
 
-  function getQRCodeUrl(assetID: string): string {
-    let origin = displayProperties.baseURL.trim();
-
-    // remove trailing slash
-    if (origin.endsWith("/")) {
-      origin = origin.slice(0, -1);
-    }
-
-    const data = `${origin}/a/${assetID}`;
-
+  function getQRCodeUrl(assetID: string, entityID?: string): string {
+    const data = labelDestination(displayProperties.baseURL, assetID, entityID);
     return route(`/qrcode`, { data: encodeURIComponent(data) });
   }
 
   function getItem(
     n: number,
-    item: { assetId: string; name: string; parent?: { name: string } | null } | null
+    item: { id: string; assetId: string; name: string; parent?: { name: string } | null } | null
   ): LabelData {
     // format n into - seperated string with leading zeros
     const assetID = fmtAssetID(item?.assetId ?? n + 1);
 
     return {
-      url: getQRCodeUrl(assetID),
+      url: getQRCodeUrl(assetID, item?.id),
       assetID: item?.assetId ?? assetID,
       name: item?.name ?? labelBlankLine,
       // Since the entities refactor an item's whereabouts is its parent
@@ -280,7 +273,7 @@
   const getHomeBoxLineText = computed(() => {
     return (item: LabelData): string | null => {
       if (replaceHomeboxBehavior.value === BEHAVIOR_SHOW) {
-        return "HomeBox";
+        return "TeamShift";
       }
       if (replaceHomeboxBehavior.value === BEHAVIOR_ALWAYS_REPLACE) {
         return replaceHomeboxText.value;
@@ -407,7 +400,7 @@
   <div class="print:hidden">
     <Toaster />
     <div class="container prose mx-auto max-w-4xl p-4 pt-6">
-      <h1>HomeBox {{ $t("reports.label_generator.title") }}</h1>
+      <h1>TeamShift {{ $t("reports.label_generator.title") }}</h1>
       <p>
         {{ $t("reports.label_generator.instruction_1") }}
       </p>

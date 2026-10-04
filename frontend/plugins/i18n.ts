@@ -2,6 +2,7 @@
 import type { CompileError, MessageContext } from "vue-i18n";
 import { createI18n } from "vue-i18n";
 import { IntlMessageFormat } from "intl-messageformat";
+import { brandMessage } from "~/lib/brand";
 
 export default defineNuxtPlugin(({ vueApp }) => {
   function checkDefaultLanguage() {
@@ -76,7 +77,7 @@ export const messageCompiler: (
     /**
      * You can tune your message compiler performance more with your cache strategy or also memoization at here
      */
-    const formatter = new IntlMessageFormat(message, locale);
+    const formatter = new IntlMessageFormat(brandMessage(message), locale);
     return (ctx: MessageContext) => {
       return formatter.format(ctx.values);
     };
