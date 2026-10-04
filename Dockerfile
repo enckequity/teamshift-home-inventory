@@ -82,8 +82,8 @@ COPY --from=builder /go/bin/api /app
 RUN chmod +x /app/api
 
 # Labels and configuration for the final image
-LABEL Name=homebox Version=0.0.1
-LABEL org.opencontainers.image.source="https://github.com/sysadminsmedia/homebox"
+LABEL Name=teamshift-home-inventory Version=0.0.1
+LABEL org.opencontainers.image.source="https://github.com/enckequity/teamshift-home-inventory"
 
 # Expose necessary ports for Homebox
 EXPOSE 7745
