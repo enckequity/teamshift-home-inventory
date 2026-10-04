@@ -1,6 +1,6 @@
 # Source and upgrade record
 
-Modified by TeamShift on 2026-10-04: presentation branding and local acceptance checks. Upstream copyright and AGPL notices are retained.
+Modified by TeamShift on 2026-10-04: presentation branding, dependency-stage build mounts and local acceptance checks. Upstream copyright and AGPL notices are retained.
 
 Upstream: https://github.com/sysadminsmedia/homebox
 Baseline: b31d6d41326fce44b7fce1c3e424b1d1714e8c4a
