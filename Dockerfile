@@ -16,9 +16,10 @@ WORKDIR /app
 # Install pnpm 10 (latest stable)
 RUN npm install -g pnpm@10
 
-# Compile source with a temporary dependency-stage mount; avoid duplicating module layers.
+# Copy over source files and node_modules from dependencies stage
 COPY frontend . 
-RUN --mount=type=bind,from=frontend-dependencies,source=/app/node_modules,target=/app/node_modules,rw pnpm build
+COPY --from=frontend-dependencies /app/node_modules ./node_modules
+RUN pnpm build
 
 # Go dependencies stage
 FROM public.ecr.aws/docker/library/golang:alpine AS builder-dependencies
@@ -44,7 +45,8 @@ RUN apk update && \
 
 WORKDIR /go/src/app
 
-# Copy source; module dependencies are mounted only during compilation.
+# Copy Go modules (from dependencies stage) and source code
+COPY --from=builder-dependencies /go/pkg/mod /go/pkg/mod
 COPY ./backend .
 
 # Clear old public files and copy new ones from frontend build
@@ -52,8 +54,7 @@ RUN rm -rf ./app/api/public
 COPY --from=frontend-builder /app/.output/public ./app/api/static/public
 
 # Use cache for Go build artifacts
-RUN --mount=type=bind,from=builder-dependencies,source=/go/pkg/mod,target=/go/pkg/mod \
-    --mount=type=cache,target=/root/.cache/go-build \
+RUN --mount=type=cache,target=/root/.cache/go-build \
     if [ "$TARGETARCH" = "arm" ] || [ "$TARGETARCH" = "riscv64" ];  \
     then echo "nodynamic" $TARGETOS $TARGETARCH; CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build \
         -ldflags "-s -w -X main.commit=$COMMIT -X main.buildTime=$BUILD_TIME -X main.version=$VERSION" \
