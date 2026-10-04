@@ -53,8 +53,8 @@ COPY ./backend .
 RUN rm -rf ./app/api/public
 COPY --from=frontend-builder /app/.output/public ./app/api/static/public
 
-# Use cache for Go build artifacts
-RUN --mount=type=cache,target=/root/.cache/go-build \
+# Compile with the canonical build worker (no BuildKit-only mount syntax).
+RUN \
     if [ "$TARGETARCH" = "arm" ] || [ "$TARGETARCH" = "riscv64" ];  \
     then echo "nodynamic" $TARGETOS $TARGETARCH; CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build \
         -ldflags "-s -w -X main.commit=$COMMIT -X main.buildTime=$BUILD_TIME -X main.version=$VERSION" \
