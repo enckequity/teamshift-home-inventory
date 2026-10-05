@@ -6,7 +6,6 @@
     up the tree
     -->
     <ModalConfirm />
-    <OutdatedModal v-if="status" :status="status" />
     <EntityCreateModal />
     <WipeInventoryDialog />
     <TagCreateModal />
@@ -214,18 +213,18 @@
 
           <footer v-if="status" class="bottom-0 w-full pb-4 text-center">
             <p class="text-center text-sm">
-              <span
-                v-html="
-                  DOMPurify.sanitize(
-                    $t('global.footer.version_link', {
-                      version: status.build.version.replace(/^v/, ''),
-                      build: status.build.commit,
-                    })
-                  )
-                "
-              />
+              <a :href="sourceUrl" target="_blank" rel="noopener noreferrer">
+                {{
+                  $t("global.footer.build_label", {
+                    version: status.build.version.replace(/^v/, ""),
+                    build: status.build.commit,
+                  })
+                }}
+              </a>
               ~
-              <span v-html="DOMPurify.sanitize($t('global.footer.api_link'))" />
+              <a href="https://homebox.software/en/api/" target="_blank" rel="noopener noreferrer">
+                {{ $t("global.footer.upstream_api_docs") }}
+              </a>
             </p>
           </footer>
         </div>
@@ -236,7 +235,7 @@
 
 <script lang="ts" setup>
   import { useI18n } from "vue-i18n";
-  import DOMPurify from "dompurify";
+  import { buildSourceUrl } from "~/lib/brand";
   import { useTagStore } from "~/stores/tags";
   import { useLocationStore } from "~~/stores/locations";
   import { useEntityTypeStore } from "~~/stores/entityTypes";
@@ -286,7 +285,6 @@
   import { toast } from "@/components/ui/sonner";
   import { DialogID, type NoParamDialogIDs } from "~/components/ui/dialog-provider/utils";
   import ModalConfirm from "~/components/ModalConfirm.vue";
-  import OutdatedModal from "~/components/App/OutdatedModal.vue";
   import EntityCreateModal from "~/components/Entity/CreateModal.vue";
   import WipeInventoryDialog from "~/components/WipeInventoryDialog.vue";
   import TagCreateModal from "~/components/Tag/CreateModal.vue";
@@ -320,6 +318,8 @@
 
     return data;
   });
+
+  const sourceUrl = computed(() => buildSourceUrl(status.value?.build.commit ?? ""));
 
   const search = ref("");
 
