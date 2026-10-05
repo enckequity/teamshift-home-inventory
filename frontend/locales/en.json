@@ -460,6 +460,9 @@
         "entity_types": "Entity Types",
         "follow_dev": "Follow the Developer",
         "footer": {
+            "build_label": "Version: {version} Build: {build}",
+            "upstream_api_docs": "Upstream API documentation",
+            "upstream_docs": "Upstream documentation",
             "api_link": "'<a href=\"https://homebox.software/en/api/\" target=\"_blank\">'API'</a>'",
             "version_link": "'<'a href=\"https://github.com/sysadminsmedia/homebox/releases/tag/v{ version }\" target=\"_blank\"'>' Version: { version } Build: { build } '</a>'"
         },
