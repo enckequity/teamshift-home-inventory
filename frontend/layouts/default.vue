@@ -18,15 +18,6 @@
     <SidebarProvider :default-open="sidebarState">
       <Sidebar collapsible="icon">
         <SidebarHeader class="items-center">
-          <SidebarGroupLabel class="text-base group-data-[collapsible=icon]:hidden">{{
-            $t("global.welcome", { username: username })
-          }}</SidebarGroupLabel>
-          <NuxtLink class="group-data-[collapsible=icon]:hidden" to="/home">
-            <div class="flex size-24 items-center justify-center rounded-full bg-background-accent p-4">
-              <AppLogo />
-            </div>
-          </NuxtLink>
-
           <CollectionSelector />
 
           <DropdownMenu>
@@ -91,7 +82,7 @@
                   </SidebarMenuLink>
                 </SidebarMenuItem>
 
-                <Collapsible v-else default-open class="group/collapsible">
+                <Collapsible v-else :default-open="n.active?.value" class="group/collapsible">
                   <SidebarMenuItem>
                     <SidebarMenuItem class="flex gap-1">
                       <SidebarMenuLink
@@ -175,7 +166,7 @@
           </div>
           <!-- IMPORTANT: if you change the height of this div, alter the top value in the item edit page-->
           <div
-            class="sticky top-0 z-20 flex h-[var(--header-height-mobile)] translate-y-[-0.5px] flex-col bg-secondary p-2 shadow-md sm:h-[var(--header-height)] sm:flex-row"
+            class="sticky top-0 z-20 flex h-[var(--header-height-mobile)] translate-y-[-0.5px] flex-col bg-secondary p-2 text-secondary-foreground shadow-md sm:h-[var(--header-height)] sm:flex-row"
             :class="{
               'lg:hidden': preferences.displayLegacyHeader,
             }"
@@ -189,13 +180,14 @@
             <div class="sm:grow" />
             <div class="flex h-1/2 grow items-center justify-end gap-2 sm:h-auto">
               <Input
+                v-if="!onSearchPage"
                 v-model:model-value="search"
                 class="h-9 grow sm:max-w-sm"
                 :placeholder="$t('global.search')"
                 type="search"
                 @keyup.enter="triggerSearch"
               />
-              <div>
+              <div v-if="!onSearchPage">
                 <Button size="icon" @click="triggerSearch">
                   <MdiMagnify />
                 </Button>
@@ -258,7 +250,6 @@
     SidebarContent,
     SidebarFooter,
     SidebarGroup,
-    SidebarGroupLabel,
     SidebarHeader,
     SidebarInset,
     SidebarMenu,
@@ -291,7 +282,6 @@
   import ItemBarcodeModal from "~/components/Item/BarcodeModal.vue";
   import AppQuickMenuModal from "~/components/App/QuickMenuModal.vue";
   import AppScannerModal from "~/components/App/ScannerModal.vue";
-  import AppLogo from "~/components/App/Logo.vue";
   import AppHeaderDecor from "~/components/App/HeaderDecor.vue";
   import AppHeaderText from "~/components/App/HeaderText.vue";
   import CollectionSelector from "~/components/Collection/Selector.vue";
@@ -300,7 +290,6 @@
   import CollectionInviteCreateModal from "~/components/Collection/InviteCreateModal.vue";
 
   const { t, locale } = useI18n();
-  const username = computed(() => authCtx.user?.name || "User");
 
   const { openDialog } = useDialog();
 
@@ -386,6 +375,8 @@
   ];
 
   const route = useRoute();
+  // The search page has its own search bar, so the header one would be a duplicate.
+  const onSearchPage = computed(() => route.path === "/search");
   const router = useRouter();
 
   const nav: {
