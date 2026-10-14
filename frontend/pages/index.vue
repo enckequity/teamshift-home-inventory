@@ -292,7 +292,7 @@
                     {{ $t("index.register") }}
                   </CardTitle>
                 </CardHeader>
-                <CardContent class="flex flex-col gap-2">
+                <CardContent class="ts-inventory-auth-fields flex flex-col gap-2">
                   <FormTextField
                     id="register-email"
                     v-model="email"
@@ -352,7 +352,7 @@
                     {{ $t("index.login") }}
                   </CardTitle>
                 </CardHeader>
-                <CardContent v-if="status?.oidc?.allowLocal !== false" class="flex flex-col gap-2">
+                <CardContent v-if="status?.oidc?.allowLocal !== false" class="ts-inventory-auth-fields flex flex-col gap-2">
                   <template v-if="status && status.demo">
                     <p class="text-center text-xs italic">
                       {{ $t("global.demo_instance") }}

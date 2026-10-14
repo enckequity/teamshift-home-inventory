@@ -118,6 +118,10 @@ h3 {
     padding: min(1.5rem, 4vw);
   }
 
+  .ts-inventory-auth-fields {
+    padding-inline: min(1.5rem, 4vw);
+  }
+
   .ts-inventory-auth-options {
     align-items: flex-start;
     flex-direction: column;
