@@ -1,0 +1,87 @@
+@font-face {
+  font-family: "Figtree";
+  src: url("/fonts/figtree-latin-wght.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gabarito";
+  src: url("/fonts/gabarito-latin-wght.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+}
+
+/* TeamShift's default palette. User-selected upstream themes retain their colors. */
+:root:not([data-theme]),
+:root[data-theme="homebox"] {
+  --background: 43.636364 64.705882% 96.666667%;
+  --background-accent: 43.636364 64.705882% 96.666667%;
+  --foreground: 214.285714 14.285714% 19.215686%;
+  --primary: 200.561798 74.166667% 52.941176%;
+  --primary-foreground: 199.024390 77.358491% 10.392157%;
+  --secondary: 204.827586 70.731707% 91.960784%;
+  --secondary-foreground: 214.285714 14.285714% 19.215686%;
+  --accent: 204.827586 70.731707% 91.960784%;
+  --accent-foreground: 214.285714 14.285714% 19.215686%;
+  --muted: 46.153846 31.707317% 91.960784%;
+  --muted-foreground: 212.727273 10.679612% 40.392157%;
+  --card: 0.000000 0.000000% 100.000000%;
+  --card-foreground: 214.285714 14.285714% 19.215686%;
+  --popover: 0.000000 0.000000% 100.000000%;
+  --popover-foreground: 214.285714 14.285714% 19.215686%;
+  --input: 44.000000 24.590164% 88.039216%;
+  --border: 44.000000 24.590164% 88.039216%;
+  --ring: 200.000000 75.384615% 38.235294%;
+  --sidebar-background: 43.636364 64.705882% 96.666667%;
+  --sidebar-foreground: 214.285714 14.285714% 19.215686%;
+  --sidebar-primary: 200.561798 74.166667% 52.941176%;
+  --sidebar-primary-foreground: 199.024390 77.358491% 10.392157%;
+  --sidebar-accent: 204.827586 70.731707% 91.960784%;
+  --sidebar-accent-foreground: 214.285714 14.285714% 19.215686%;
+  --sidebar-border: 44.000000 24.590164% 88.039216%;
+  --sidebar-ring: 200.000000 75.384615% 38.235294%;
+}
+
+body {
+  font-family: "Figtree", system-ui, sans-serif;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Gabarito", "Figtree", system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+[data-sidebar="header"],
+[data-sidebar="footer"] {
+  padding: 1rem;
+}
+
+[data-sidebar="group-label"] {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: none;
+}
+
+.bg-card.rounded-lg {
+  border: 1px solid hsl(var(--border));
+  box-shadow: none;
+}
+
+@media (max-width: 767px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
+  [data-sidebar="menu-button"] {
+    min-height: 44px;
+  }
+}

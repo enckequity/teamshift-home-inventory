@@ -1,0 +1,14 @@
+The typefaces in this directory are licensed under the
+SIL Open Font License, Version 1.1.
+
+  Gabarito           — Copyright (c) The Gabarito Project Authors
+                       https://github.com/naipefoundry/gabarito
+  Figtree            — Copyright (c) The Figtree Project Authors
+                       https://github.com/erikdkennedy/figtree
+  Spline Sans Mono   — Copyright (c) The Spline Sans Mono Project Authors
+                       https://github.com/SorkinType/SplineSansMono
+
+Full license text: https://openfontlicense.org/open-font-license-official-text/
+
+Files are the latin and latin-ext variable-weight woff2 subsets served by
+Google Fonts, self-hosted here so no app loads fonts from a third-party host.
