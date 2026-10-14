@@ -2,7 +2,7 @@
 
 Tracker: teamshift-monorepo#8092, parent#8085. Baseline462751a retains fork PR4 and the upstream Homebox components. Production currently runs earlier source dc8a314; this document does not claim a deployment.
 
-The shared presentation adapts the Mobbin study's quieter navigation, card hierarchy and typography to TeamShift. Default-theme colors use TeamShift's warm canvas, slate ink and sky accent. User-selected upstream themes retain their palettes. Figtree and Gabarito are self-hosted copies from TeamShift's design system at monorepo4e328b040. Their notices and full SIL Open Font License texts ship beside them. No vendor component, permission boundary, login/session store, household/collection selector, scanner, form handler or API path changes.
+The shared presentation adapts the Mobbin study's quieter navigation, card hierarchy and typography to TeamShift. Default-theme colors use TeamShift's warm canvas, slate ink and sky accent. User-selected upstream themes retain their palettes. Figtree and Gabarito are self-hosted copies from TeamShift's design system at monorepo4e328b040. Their notices and full SIL Open Font License texts ship beside them. The sign-in root has a presentation class for its quieter default-theme header. No vendor component, permission boundary, login/session store, household/collection selector, scanner, form handler or API path changes.
 
 The shared styles cover the existing layout and every route listed below. This is source coverage, not a claim that every nested signed-in interaction has browser acceptance. Wrappers and redirects remain distinct in the inventory. Camera permissions, physical scanning/print, attachments, collection membership and actual household isolation need their existing installed/runtime acceptance. Local fixture screenshots only establish the exercised presentations.
 
@@ -39,3 +39,4 @@ The shared styles cover the existing layout and every route listed below. This i
 - `frontend/pages/reports/label-generator.vue`
 - `frontend/pages/tag/[id].vue`
 - `frontend/pages/template/[id].vue`
+

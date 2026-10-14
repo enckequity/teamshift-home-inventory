@@ -218,7 +218,7 @@
 </script>
 
 <template>
-  <div class="relative flex min-h-screen flex-col">
+  <div class="ts-inventory-auth relative flex min-h-screen flex-col">
     <div class="pointer-events-none absolute top-0 z-0 min-w-full fill-primary">
       <div class="flex min-h-[20vh] flex-col bg-primary" />
       <svg

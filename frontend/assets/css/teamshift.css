@@ -74,6 +74,22 @@ h3 {
   box-shadow: none;
 }
 
+:root:not([data-theme]) .ts-inventory-auth > .pointer-events-none,
+:root[data-theme="homebox"] .ts-inventory-auth > .pointer-events-none {
+  display: none;
+}
+
+:root:not([data-theme]) .ts-inventory-auth header,
+:root[data-theme="homebox"] .ts-inventory-auth header {
+  color: hsl(var(--foreground));
+}
+
+.ts-inventory-auth header h2 {
+  font-family: "Figtree", system-ui, sans-serif;
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  line-height: 1.2;
+}
+
 @media (max-width: 767px) {
   input,
   select,
