@@ -72,6 +72,12 @@ h3 {
   padding: 1rem;
 }
 
+
+[data-collapsible="icon"] [data-sidebar="header"],
+[data-collapsible="icon"] [data-sidebar="footer"] {
+  padding: 0.5rem;
+}
+
 [data-sidebar="group-label"] {
   font-size: 0.875rem;
   font-weight: 600;
