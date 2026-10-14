@@ -218,7 +218,7 @@
 </script>
 
 <template>
-  <div class="relative flex min-h-screen flex-col">
+  <div class="ts-inventory-auth relative flex min-h-screen flex-col">
     <div class="pointer-events-none absolute top-0 z-0 min-w-full fill-primary">
       <div class="flex min-h-[20vh] flex-col bg-primary" />
       <svg
@@ -254,7 +254,7 @@
           </p>
         </div>
         <TooltipProvider :delay-duration="0">
-          <div class="z-10 ml-auto mt-6 flex items-center gap-4 sm:mt-0">
+          <div class="ts-inventory-auth-tools z-10 ml-auto mt-6 flex items-center gap-4 sm:mt-0">
             <Tooltip>
               <TooltipTrigger as-child>
                 <a
@@ -281,7 +281,7 @@
           </div>
         </TooltipProvider>
       </header>
-      <div class="grid min-h-[50vh] p-6 sm:place-items-center">
+      <div class="ts-inventory-auth-form-grid grid min-h-[50vh] p-6 sm:place-items-center">
         <div>
           <Transition name="slide-fade">
             <form v-if="registerForm" id="register-form" name="register" method="post" @submit.prevent="registerUser">
@@ -292,7 +292,7 @@
                     {{ $t("index.register") }}
                   </CardTitle>
                 </CardHeader>
-                <CardContent class="flex flex-col gap-2">
+                <CardContent class="ts-inventory-auth-fields flex flex-col gap-2">
                   <FormTextField
                     id="register-email"
                     v-model="email"
@@ -352,7 +352,7 @@
                     {{ $t("index.login") }}
                   </CardTitle>
                 </CardHeader>
-                <CardContent v-if="status?.oidc?.allowLocal !== false" class="flex flex-col gap-2">
+                <CardContent v-if="status?.oidc?.allowLocal !== false" class="ts-inventory-auth-fields flex flex-col gap-2">
                   <template v-if="status && status.demo">
                     <p class="text-center text-xs italic">
                       {{ $t("global.demo_instance") }}
@@ -380,7 +380,7 @@
                     autocomplete="current-password"
                     :required="true"
                   />
-                  <div class="flex items-center justify-between">
+                  <div class="ts-inventory-auth-options flex items-center justify-between">
                     <div class="max-w-[140px]">
                       <FormCheckbox v-model="remember" :label="$t('index.remember_me')" />
                     </div>
