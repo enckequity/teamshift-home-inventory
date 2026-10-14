@@ -110,6 +110,24 @@ h3 {
 }
 
 @media (max-width: 767px) {
+  .ts-inventory-auth-tools {
+    flex-wrap: wrap;
+  }
+
+  .ts-inventory-auth-form-grid {
+    padding: min(1.5rem, 4vw);
+  }
+
+  .ts-inventory-auth-options {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .ts-inventory-auth-options > div {
+    max-width: none;
+  }
+
   input,
   select,
   textarea {

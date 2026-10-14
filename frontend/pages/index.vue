@@ -254,7 +254,7 @@
           </p>
         </div>
         <TooltipProvider :delay-duration="0">
-          <div class="z-10 ml-auto mt-6 flex items-center gap-4 sm:mt-0">
+          <div class="ts-inventory-auth-tools z-10 ml-auto mt-6 flex items-center gap-4 sm:mt-0">
             <Tooltip>
               <TooltipTrigger as-child>
                 <a
@@ -281,7 +281,7 @@
           </div>
         </TooltipProvider>
       </header>
-      <div class="grid min-h-[50vh] p-6 sm:place-items-center">
+      <div class="ts-inventory-auth-form-grid grid min-h-[50vh] p-6 sm:place-items-center">
         <div>
           <Transition name="slide-fade">
             <form v-if="registerForm" id="register-form" name="register" method="post" @submit.prevent="registerUser">
@@ -380,7 +380,7 @@
                     autocomplete="current-password"
                     :required="true"
                   />
-                  <div class="flex items-center justify-between">
+                  <div class="ts-inventory-auth-options flex items-center justify-between">
                     <div class="max-w-[140px]">
                       <FormCheckbox v-model="remember" :label="$t('index.remember_me')" />
                     </div>
