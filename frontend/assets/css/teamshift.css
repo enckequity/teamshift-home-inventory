@@ -45,6 +45,15 @@
   --sidebar-ring: 200.000000 75.384615% 38.235294%;
 }
 
+
+/* Keep links readable on the warm canvas and selected rows. */
+:root:not([data-theme]) .text-primary,
+:root[data-theme="homebox"] .text-primary,
+:root:not([data-theme]) .hover\:text-primary:hover,
+:root[data-theme="homebox"] .hover\:text-primary:hover {
+  color: #176f9c;
+}
+
 body {
   font-family: "Figtree", system-ui, sans-serif;
 }
