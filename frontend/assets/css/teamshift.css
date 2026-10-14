@@ -89,6 +89,10 @@ h3 {
   box-shadow: none;
 }
 
+.ts-inventory-statistics {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr));
+}
+
 :root:not([data-theme]) .ts-inventory-auth > .pointer-events-none,
 :root[data-theme="homebox"] .ts-inventory-auth > .pointer-events-none {
   display: none;
