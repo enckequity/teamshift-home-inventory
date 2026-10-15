@@ -20,7 +20,7 @@
         :name="$t('components.tag.create_modal.tag_parent')"
       />
       <ColorSelector v-model="form.color" :label="$t('components.tag.create_modal.tag_color')" :show-hex="true" />
-      <IconSelector v-model="form.icon" :label="$t('components.tag.create_modal.tag_icon')" />
+      <IconSelector class="ts-inventory-tag-icons" v-model="form.icon" :label="$t('components.tag.create_modal.tag_icon')" />
       <div class="ts-inventory-tag-actions mt-4 flex flex-row-reverse">
         <ButtonGroup>
           <Button :disabled="loading" type="submit">{{ $t("global.create") }}</Button>

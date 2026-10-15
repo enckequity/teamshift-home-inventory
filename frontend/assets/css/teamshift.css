@@ -180,6 +180,12 @@ h3 {
   white-space: normal;
 }
 
+.ts-inventory-tag-icons .grid {
+  width: 100%;
+  max-width: 10.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 2.5rem), 1fr));
+}
+
 .ts-inventory-product-header {
   position: sticky;
   top: 0;
