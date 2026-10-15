@@ -153,6 +153,10 @@ h3 {
   overflow: clip;
 }
 
+.ts-inventory-edit-toolbar {
+  top: calc(var(--header-height) + 0.25rem);
+}
+
 .ts-inventory-product-header {
   position: sticky;
   top: 0;
@@ -393,8 +397,15 @@ h3 {
 }
 
 @media (min-width: 769px) {
+  .ts-inventory-modern > .group.peer {
+    position: absolute;
+    width: 0;
+    height: 0;
+  }
+
   .ts-inventory-modern > .group.peer > div:first-child {
     width: 0;
+    height: 0;
   }
 
   .ts-inventory-modern > .group.peer > div:nth-child(2) {
