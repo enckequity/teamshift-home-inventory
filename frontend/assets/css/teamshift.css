@@ -412,6 +412,10 @@ h3 {
     top: var(--header-height);
     height: calc(100dvh - var(--header-height));
   }
+
+  .ts-inventory-modern > .group.peer[data-state="collapsed"] > div:nth-child(2) {
+    visibility: hidden;
+  }
 }
 
 @media (min-width: 769px) and (max-width: 1100px) {
