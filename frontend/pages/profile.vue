@@ -348,7 +348,7 @@
       </DialogContent>
     </Dialog>
 
-    <BaseContainer class="flex flex-col gap-4">
+    <BaseContainer class="ts-inventory-account-page flex flex-col gap-4">
       <BaseCard>
         <template #title>
           <BaseSectionHeader>

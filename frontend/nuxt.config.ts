@@ -87,7 +87,7 @@ export default defineNuxtConfig({
       name: "TeamShift Home Inventory",
       short_name: "TeamShift Home Inventory",
       description: "Home Inventory App",
-      theme_color: "#FCF9F1",
+      theme_color: "#ffffff",
       start_url: "/home",
       icons: [
         {
