@@ -157,6 +157,29 @@ h3 {
   top: calc(var(--header-height) + 0.25rem);
 }
 
+.ts-inventory-collection-popover {
+  width: min(320px, calc(100vw - 32px));
+  min-width: 0;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+}
+
+.ts-inventory-tag-actions > div {
+  min-width: 0;
+  max-width: 100%;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.ts-inventory-tag-actions button[data-button] {
+  height: auto;
+  min-height: 2.75rem;
+  max-width: 100%;
+  white-space: normal;
+}
+
 .ts-inventory-product-header {
   position: sticky;
   top: 0;

@@ -29,6 +29,7 @@
       </Button>
     </PopoverTrigger>
     <PopoverContent
+      class="ts-inventory-collection-popover"
       :class="[sidebar.state.value === 'collapsed' ? 'min-w-48 p-0' : 'w-[--reka-popper-anchor-width] p-0']"
     >
       <Command :ignore-filter="true">
