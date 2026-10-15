@@ -16,7 +16,7 @@
     <CollectionJoinModal />
     <CollectionInviteCreateModal />
     <SidebarProvider
-      :default-open="preferences.displayLegacyHeader ? sidebarState : false"
+      :default-open="defaultSidebarOpen"
       class="ts-inventory-shell"
       :class="{ 'ts-inventory-modern': !preferences.displayLegacyHeader }"
       :style="productHeaderHeight ? {
@@ -36,7 +36,7 @@
                       'bg-accent text-accent-foreground': n.active?.value,
                       'text-nowrap': typeof locale === 'string' && locale.startsWith('zh-'),
                     }"
-                    :tooltip="n.name.value"
+                    :tooltip="narrowViewport ? undefined : n.name.value"
                   >
                     <component :is="n.icon" />
                     <span>{{ n.name.value }}</span>
@@ -52,7 +52,7 @@
                           'bg-accent text-accent-foreground': n.active?.value,
                           'text-nowrap': typeof locale === 'string' && locale.startsWith('zh-'),
                         }"
-                        :tooltip="n.name.value"
+                        :tooltip="narrowViewport ? undefined : n.name.value"
                       >
                         <component :is="n.icon" />
                         <span>{{ n.name.value }}</span>
@@ -75,7 +75,7 @@
                               'text-nowrap': typeof locale === 'string' && locale.startsWith('zh-'),
                               'h-min py-0': true,
                             }"
-                            :tooltip="c.name.value"
+                            :tooltip="narrowViewport ? undefined : c.name.value"
                           >
                             <span>{{ c.name.value }}</span>
                           </SidebarMenuLink>
@@ -92,7 +92,7 @@
                   :class="{
                     'text-nowrap': typeof locale === 'string' && locale.startsWith('zh-'),
                   }"
-                  :tooltip="$t('menu.scanner')"
+                  :tooltip="narrowViewport ? undefined : $t('menu.scanner')"
                   @click.prevent="openDialog(DialogID.Scanner)"
                 >
                   <MdiQrcodeScan />
@@ -106,7 +106,7 @@
         <SidebarFooter>
           <SidebarMenuButton
             class="flex justify-center group-data-[collapsible=icon]:justify-start group-data-[collapsible=icon]:bg-destructive group-data-[collapsible=icon]:text-destructive-foreground group-data-[collapsible=icon]:shadow-sm group-data-[collapsible=icon]:hover:bg-destructive/90"
-            :tooltip="$t('global.sign_out')"
+            :tooltip="narrowViewport ? undefined : $t('global.sign_out')"
             data-testid="logout-button"
             @click="logout"
           >
@@ -234,7 +234,7 @@
 
 <script lang="ts" setup>
   import { useI18n } from "vue-i18n";
-  import { useResizeObserver } from "@vueuse/core";
+  import { useMediaQuery, useResizeObserver } from "@vueuse/core";
   import { buildSourceUrl } from "~/lib/brand";
   import { useTagStore } from "~/stores/tags";
   import { useLocationStore } from "~~/stores/locations";
@@ -301,6 +301,7 @@
   const { openDialog } = useDialog();
 
   const preferences = useViewPreferences();
+  const narrowViewport = useMediaQuery("(max-width: 768px)");
 
   // Keep the existing edit toolbar below the header when text or translations grow.
   const productHeader = ref<HTMLElement | null>(null);
@@ -314,6 +315,9 @@
     readonly: true,
     decode: value => value !== "false",
   });
+  const defaultSidebarOpen = computed<boolean>(() =>
+    preferences.value.displayLegacyHeader ? sidebarState.value ?? true : false
+  );
 
   const pubApi = usePublicApi();
   const { data: status } = useAsyncData(async () => {
