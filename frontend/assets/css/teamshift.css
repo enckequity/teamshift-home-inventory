@@ -17,41 +17,41 @@
 /* TeamShift's default palette. User-selected upstream themes retain their colors. */
 :root:not([data-theme]),
 :root[data-theme="homebox"] {
-  --background: 43.636364 64.705882% 96.666667%;
-  --background-accent: 43.636364 64.705882% 96.666667%;
-  --foreground: 214.285714 14.285714% 19.215686%;
-  --primary: 200.561798 74.166667% 52.941176%;
-  --primary-foreground: 199.024390 77.358491% 10.392157%;
-  --secondary: 204.827586 70.731707% 91.960784%;
-  --secondary-foreground: 214.285714 14.285714% 19.215686%;
-  --accent: 204.827586 70.731707% 91.960784%;
-  --accent-foreground: 214.285714 14.285714% 19.215686%;
-  --muted: 46.153846 31.707317% 91.960784%;
-  --muted-foreground: 212.727273 10.679612% 40.392157%;
-  --card: 0.000000 0.000000% 100.000000%;
-  --card-foreground: 214.285714 14.285714% 19.215686%;
-  --popover: 0.000000 0.000000% 100.000000%;
-  --popover-foreground: 214.285714 14.285714% 19.215686%;
-  --input: 44.000000 24.590164% 88.039216%;
-  --border: 44.000000 24.590164% 88.039216%;
-  --ring: 200.000000 75.384615% 38.235294%;
-  --sidebar-background: 43.636364 64.705882% 96.666667%;
-  --sidebar-foreground: 214.285714 14.285714% 19.215686%;
-  --sidebar-primary: 200.561798 74.166667% 52.941176%;
-  --sidebar-primary-foreground: 199.024390 77.358491% 10.392157%;
-  --sidebar-accent: 204.827586 70.731707% 91.960784%;
-  --sidebar-accent-foreground: 214.285714 14.285714% 19.215686%;
-  --sidebar-border: 44.000000 24.590164% 88.039216%;
-  --sidebar-ring: 200.000000 75.384615% 38.235294%;
+  --background: 0 0% 100%;
+  --background-accent: 0 0% 100%;
+  --foreground: 0 0% 7.843137%;
+  --primary: 0 0% 7.843137%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 93.72549%;
+  --secondary-foreground: 0 0% 7.843137%;
+  --accent: 0 0% 93.72549%;
+  --accent-foreground: 0 0% 7.843137%;
+  --muted: 0 0% 93.72549%;
+  --muted-foreground: 0 0% 41.960784%;
+  --card: 0 0% 93.72549%;
+  --card-foreground: 0 0% 7.843137%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 7.843137%;
+  --input: 0 0% 85.882353%;
+  --border: 0 0% 85.882353%;
+  --ring: 0 0% 7.843137%;
+  --sidebar-background: 0 0% 100%;
+  --sidebar-foreground: 0 0% 7.843137%;
+  --sidebar-primary: 0 0% 7.843137%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 0 0% 93.72549%;
+  --sidebar-accent-foreground: 0 0% 7.843137%;
+  --sidebar-border: 0 0% 85.882353%;
+  --sidebar-ring: 0 0% 7.843137%;
 }
 
 
-/* Keep links readable on the warm canvas and selected rows. */
+/* Links keep the same readable ink on white and gray surfaces. */
 :root:not([data-theme]) .text-primary,
 :root[data-theme="homebox"] .text-primary,
 :root:not([data-theme]) .hover\:text-primary:hover,
 :root[data-theme="homebox"] .hover\:text-primary:hover {
-  color: #176f9c;
+  color: #141414;
 }
 
 body {
@@ -140,5 +140,416 @@ h3 {
 
   [data-sidebar="menu-button"] {
     min-height: 44px;
+  }
+}
+
+/* The cloned product header supplies the layout. Inventory keeps its controls. */
+.ts-inventory-modern {
+  flex-direction: column;
+}
+
+.ts-inventory-main {
+  min-width: 0;
+  overflow: clip;
+}
+
+.ts-inventory-edit-toolbar {
+  top: calc(var(--header-height) + 0.25rem);
+}
+
+.ts-inventory-collection-popover {
+  width: min(320px, calc(100vw - 32px));
+  min-width: 0;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+}
+
+.ts-inventory-tag-actions > div {
+  min-width: 0;
+  max-width: 100%;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.ts-inventory-tag-actions button[data-button] {
+  height: auto;
+  min-height: 2.75rem;
+  max-width: 100%;
+  white-space: normal;
+}
+
+.ts-inventory-tag-icons .grid {
+  width: 100%;
+  max-width: 10.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 2.5rem), 1fr));
+}
+
+.ts-inventory-product-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: auto auto minmax(120px, 1fr) auto;
+  grid-template-rows: minmax(72px, auto) minmax(48px, auto);
+  align-items: center;
+  column-gap: 24px;
+  padding: 0 32px;
+  border-bottom: 1px solid hsl(var(--border));
+  background: hsl(var(--background));
+}
+
+.ts-inventory-brand,
+.ts-inventory-header-tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.ts-inventory-brand {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.ts-inventory-brand > a {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  min-height: 44px;
+}
+
+.ts-inventory-collection {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+  max-width: 180px;
+}
+
+.ts-inventory-collection > button {
+  height: auto;
+  min-height: 44px;
+  max-width: 100%;
+  border: 0;
+  border-radius: 999px;
+  box-shadow: none;
+  filter: none;
+}
+
+.ts-inventory-search {
+  grid-column: 3;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-self: center;
+  width: min(512px, 100%);
+  min-width: 0;
+  min-height: 48px;
+  margin-block: 12px;
+  padding-inline: 8px;
+  border-radius: 999px;
+  background: hsl(var(--muted));
+}
+
+.ts-inventory-search > input {
+  min-width: 0;
+  height: auto;
+  min-height: 48px;
+  padding-inline: 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  font-size: 1rem;
+  box-shadow: none;
+}
+
+.ts-inventory-header-tools {
+  grid-column: 4;
+  grid-row: 1;
+  justify-self: end;
+  gap: 8px;
+}
+
+.ts-inventory-product-header button {
+  flex-shrink: 0;
+}
+
+.ts-inventory-header-tools > button:not(.ts-inventory-create) {
+  width: 44px;
+  min-height: 44px;
+}
+
+.ts-inventory-product-header .ts-inventory-create {
+  min-height: 44px;
+  border-radius: 999px;
+  padding-inline: 18px;
+  box-shadow: none;
+}
+
+.ts-inventory-product-header :is(button, a):focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 3px;
+}
+
+.ts-inventory-primary-nav {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: flex;
+  gap: 24px;
+  align-items: stretch;
+  min-width: 0;
+  min-height: 48px;
+  overflow-x: auto;
+  padding-inline: 4px;
+  scrollbar-width: thin;
+}
+
+.ts-inventory-primary-nav > a {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  padding-block: 12px;
+  color: hsl(var(--muted-foreground));
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.ts-inventory-primary-nav > a[aria-current="page"] {
+  color: hsl(var(--foreground));
+  font-weight: 600;
+}
+
+.ts-inventory-primary-nav > a[aria-current="page"]::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: currentColor;
+  content: "";
+}
+
+.ts-inventory-primary-nav > a:focus-visible {
+  outline-offset: -3px;
+  border-radius: 4px;
+}
+
+.ts-inventory-shell:not(.ts-inventory-modern) .ts-inventory-primary-nav {
+  display: none;
+}
+
+.ts-inventory-page {
+  width: 100%;
+  max-width: 2000px;
+  margin-block: 32px;
+  padding-inline: 32px;
+  gap: 32px;
+}
+
+.ts-inventory-account-page {
+  max-width: 732px;
+}
+
+.ts-inventory-page > section + section {
+  margin-top: 8px;
+}
+
+.ts-inventory-section-title {
+  margin-bottom: 24px;
+  padding-left: 0;
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  line-height: 1.25;
+}
+
+.ts-inventory-card,
+.ts-inventory-item-card,
+.ts-inventory-location-card,
+.ts-inventory-stat-card {
+  border: 0;
+  border-radius: 24px;
+  box-shadow: none;
+}
+
+.ts-inventory-statistics {
+  gap: 24px;
+}
+
+.ts-inventory-stat-card {
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px;
+}
+
+.ts-inventory-stat-card > :nth-child(2) {
+  font-size: clamp(1.75rem, 2.5vw, 2.75rem);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.ts-inventory-location-card > a > div {
+  padding: 24px;
+}
+
+.ts-inventory-item-preview {
+  height: 280px;
+}
+
+.ts-inventory-item-preview > img {
+  inset: 0;
+  height: 100%;
+}
+
+.ts-inventory-item-card > a > div:last-child {
+  padding: 20px 24px 24px;
+}
+
+.ts-inventory-shell :is(button, a).inline-flex.rounded-md {
+  min-height: 2.75rem;
+  border-radius: 999px;
+}
+
+.ts-inventory-shell :is(input:not([type="checkbox"]):not([type="radio"]), textarea, select) {
+  border-radius: 12px;
+}
+
+[role="dialog"]:not([data-sidebar]) {
+  border-radius: 24px;
+}
+
+[data-sidebar="sidebar"][data-mobile="true"] {
+  max-width: 100vw;
+}
+
+@media (min-width: 769px) {
+  .ts-inventory-modern > .group.peer {
+    position: absolute;
+    width: 0;
+    height: 0;
+  }
+
+  .ts-inventory-modern > .group.peer > div:first-child {
+    width: 0;
+    height: 0;
+  }
+
+  .ts-inventory-modern > .group.peer > div:nth-child(2) {
+    top: var(--header-height);
+    height: calc(100dvh - var(--header-height));
+  }
+
+  .ts-inventory-modern > .group.peer[data-state="collapsed"] > div:nth-child(2) {
+    visibility: hidden;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1100px) {
+  .ts-inventory-product-header {
+    column-gap: 16px;
+    padding-inline: 24px;
+  }
+
+  .ts-inventory-collection {
+    max-width: 100px;
+  }
+
+  .ts-inventory-brand > a > span > span {
+    display: none;
+  }
+
+  .ts-inventory-product-header .ts-inventory-create {
+    width: 44px;
+    padding-inline: 0;
+  }
+
+  .ts-inventory-create > span {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .ts-inventory-product-header {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-rows: minmax(64px, auto) auto;
+    gap: 0 8px;
+    padding: 0 20px 12px;
+  }
+
+  .ts-inventory-brand,
+  .ts-inventory-header-tools {
+    gap: 4px;
+  }
+
+  .ts-inventory-header-tools {
+    grid-column: 3;
+  }
+
+  .ts-inventory-brand > a > span > span,
+  .ts-inventory-create > span {
+    display: none;
+  }
+
+  .ts-inventory-brand > a > span {
+    gap: 0;
+    height: 24px;
+  }
+
+  .ts-inventory-brand > a svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .ts-inventory-brand > [data-sidebar="trigger"] {
+    width: 44px;
+    min-height: 44px;
+  }
+
+  .ts-inventory-collection {
+    justify-self: end;
+    max-width: 100%;
+  }
+
+  .ts-inventory-collection > button > svg:last-child:not(:first-child) {
+    display: none;
+  }
+
+  .ts-inventory-collection > button {
+    width: 100%;
+    padding-inline: 8px;
+  }
+
+  .ts-inventory-search {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+    margin: 0;
+  }
+
+  .ts-inventory-primary-nav {
+    display: none;
+  }
+
+  .ts-inventory-product-header .ts-inventory-create {
+    width: 44px;
+    padding-inline: 0;
+  }
+
+  .ts-inventory-page {
+    padding-inline: 20px;
+    margin-block: 24px;
+    gap: 24px;
+  }
+
+  .ts-inventory-statistics {
+    gap: 12px;
+  }
+
+  .ts-inventory-stat-card,
+  .ts-inventory-location-card > a > div {
+    padding: 20px;
   }
 }

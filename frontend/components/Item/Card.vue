@@ -1,5 +1,5 @@
 <template>
-  <Card class="relative overflow-hidden">
+  <Card class="ts-inventory-item-card relative overflow-hidden">
     <div v-if="tableRow" class="absolute left-1 top-1 z-10">
       <Checkbox
         class="size-5 bg-accent hover:bg-background-accent"
@@ -9,7 +9,7 @@
       />
     </div>
     <NuxtLink :to="`/${item.entityType?.isLocation ? 'location' : 'item'}/${item.id}`">
-      <div class="relative h-[200px]">
+      <div class="ts-inventory-item-preview relative h-[200px]">
         <img
           v-if="imageUrl && objectContain"
           class="absolute h-[200px] w-full object-cover blur-md"

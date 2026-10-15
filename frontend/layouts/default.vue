@@ -15,55 +15,16 @@
     <CollectionCreateModal />
     <CollectionJoinModal />
     <CollectionInviteCreateModal />
-    <SidebarProvider :default-open="sidebarState">
-      <Sidebar collapsible="icon">
-        <SidebarHeader class="items-center">
-          <CollectionSelector />
-
-          <DropdownMenu>
-            <DropdownMenuTrigger as-child>
-              <SidebarMenuButton
-                class="flex justify-center bg-primary text-primary-foreground drop-shadow-md hover:bg-primary/90 active:bg-primary/90 active:text-primary-foreground group-data-[collapsible=icon]:justify-start"
-                :tooltip="$t('global.create')"
-                hotkey="Shortcut: Ctrl+`"
-              >
-                <MdiPlus />
-                <span>
-                  {{ $t("global.create") }}
-                </span>
-              </SidebarMenuButton>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent class="z-40 min-w-[var(--reka-dropdown-menu-trigger-width)]">
-              <DropdownMenuItem
-                v-for="btn in dropdown"
-                :key="btn.id"
-                class="group cursor-pointer text-lg"
-                @click="
-                  () => {
-                    if (btn.dialogId === DialogID.CreateEntity) {
-                      if (btn.id == 0)
-                        // create item
-                        openDialog(btn.dialogId, { params: { baseType: 'item' } });
-                      else if (btn.id == 1)
-                        // create location
-                        openDialog(btn.dialogId, { params: { baseType: 'location' } });
-                    } else {
-                      openDialog(btn.dialogId as NoParamDialogIDs);
-                    }
-                  }
-                "
-              >
-                {{ btn.name.value }}
-                <Shortcut
-                  v-if="btn.shortcut"
-                  class="invisible ml-auto group-hover:visible"
-                  :keys="btn.shortcut.replace('Shift', '⇧').split('+')"
-                />
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </SidebarHeader>
-
+    <SidebarProvider
+      :default-open="defaultSidebarOpen"
+      class="ts-inventory-shell"
+      :class="{ 'ts-inventory-modern': !preferences.displayLegacyHeader }"
+      :style="productHeaderHeight ? {
+        '--header-height': `${productHeaderHeight}px`,
+        '--header-height-mobile': `${productHeaderHeight}px`,
+      } : undefined"
+    >
+      <Sidebar :collapsible="preferences.displayLegacyHeader ? 'icon' : 'offcanvas'">
         <SidebarContent>
           <SidebarGroup>
             <SidebarMenu>
@@ -75,7 +36,7 @@
                       'bg-accent text-accent-foreground': n.active?.value,
                       'text-nowrap': typeof locale === 'string' && locale.startsWith('zh-'),
                     }"
-                    :tooltip="n.name.value"
+                    :tooltip="narrowViewport ? undefined : n.name.value"
                   >
                     <component :is="n.icon" />
                     <span>{{ n.name.value }}</span>
@@ -91,7 +52,7 @@
                           'bg-accent text-accent-foreground': n.active?.value,
                           'text-nowrap': typeof locale === 'string' && locale.startsWith('zh-'),
                         }"
-                        :tooltip="n.name.value"
+                        :tooltip="narrowViewport ? undefined : n.name.value"
                       >
                         <component :is="n.icon" />
                         <span>{{ n.name.value }}</span>
@@ -114,7 +75,7 @@
                               'text-nowrap': typeof locale === 'string' && locale.startsWith('zh-'),
                               'h-min py-0': true,
                             }"
-                            :tooltip="c.name.value"
+                            :tooltip="narrowViewport ? undefined : c.name.value"
                           >
                             <span>{{ c.name.value }}</span>
                           </SidebarMenuLink>
@@ -131,7 +92,7 @@
                   :class="{
                     'text-nowrap': typeof locale === 'string' && locale.startsWith('zh-'),
                   }"
-                  :tooltip="$t('menu.scanner')"
+                  :tooltip="narrowViewport ? undefined : $t('menu.scanner')"
                   @click.prevent="openDialog(DialogID.Scanner)"
                 >
                   <MdiQrcodeScan />
@@ -145,7 +106,7 @@
         <SidebarFooter>
           <SidebarMenuButton
             class="flex justify-center group-data-[collapsible=icon]:justify-start group-data-[collapsible=icon]:bg-destructive group-data-[collapsible=icon]:text-destructive-foreground group-data-[collapsible=icon]:shadow-sm group-data-[collapsible=icon]:hover:bg-destructive/90"
-            :tooltip="$t('global.sign_out')"
+            :tooltip="narrowViewport ? undefined : $t('global.sign_out')"
             data-testid="logout-button"
             @click="logout"
           >
@@ -158,47 +119,93 @@
 
         <SidebarRail />
       </Sidebar>
-      <SidebarInset class="min-h-dvh max-w-full overflow-hidden bg-background-accent">
+      <SidebarInset
+        class="ts-inventory-main min-h-dvh max-w-full bg-background-accent"
+      >
         <div class="relative flex h-full flex-col justify-center">
           <div v-if="preferences.displayLegacyHeader">
             <AppHeaderDecor class="-mt-10 hidden lg:block" />
             <SidebarTrigger class="absolute left-2 top-2 hidden lg:flex" variant="default" />
           </div>
-          <!-- IMPORTANT: if you change the height of this div, alter the top value in the item edit page-->
-          <div
-            class="sticky top-0 z-20 flex h-[var(--header-height-mobile)] translate-y-[-0.5px] flex-col border-b border-border bg-background p-2 text-foreground sm:h-[var(--header-height)] sm:flex-row"
-            :class="{
-              'lg:hidden': preferences.displayLegacyHeader,
-            }"
-          >
-            <div class="flex h-1/2 items-center gap-2 sm:h-auto">
+          <header ref="productHeader" class="ts-inventory-product-header">
+            <div class="ts-inventory-brand">
               <SidebarTrigger variant="default" />
-              <NuxtLink to="/home">
+              <NuxtLink to="/home" :aria-label="$t('menu.home')">
                 <AppHeaderText class="h-6" />
               </NuxtLink>
             </div>
-            <div class="sm:grow" />
-            <div class="flex h-1/2 grow items-center justify-end gap-2 sm:h-auto">
+            <div class="ts-inventory-collection"><CollectionSelector /></div>
+            <div v-if="!onSearchPage" class="ts-inventory-search" role="search">
               <Input
-                v-if="!onSearchPage"
                 v-model:model-value="search"
-                class="h-9 grow sm:max-w-sm"
+                :aria-label="$t('global.search')"
                 :placeholder="$t('global.search')"
                 type="search"
                 @keyup.enter="triggerSearch"
               />
-              <div v-if="!onSearchPage">
-                <Button size="icon" @click="triggerSearch">
-                  <MdiMagnify />
-                </Button>
-              </div>
-              <div>
-                <Button size="icon" @click="openScanner">
-                  <MdiQrcodeScan />
-                </Button>
-              </div>
+              <Button variant="ghost" size="icon" :aria-label="$t('global.search')" @click="triggerSearch">
+                <MdiMagnify />
+              </Button>
             </div>
-          </div>
+            <div class="ts-inventory-header-tools">
+              <Button variant="ghost" size="icon" :aria-label="$t('menu.scanner')" @click="openScanner">
+                <MdiQrcodeScan />
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger as-child>
+                  <Button
+                    class="ts-inventory-create"
+                    :aria-label="$t('global.create')"
+                    title="Shortcut: Ctrl+`"
+                  >
+                    <MdiPlus />
+                    <span>
+                      {{ $t("global.create") }}
+                    </span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent class="z-40 min-w-[var(--reka-dropdown-menu-trigger-width)]">
+                  <DropdownMenuItem
+                    v-for="btn in dropdown"
+                    :key="btn.id"
+                    class="group cursor-pointer text-lg"
+                    @click="
+                      () => {
+                        if (btn.dialogId === DialogID.CreateEntity) {
+                          if (btn.id == 0)
+                            // create item
+                            openDialog(btn.dialogId, { params: { baseType: 'item' } });
+                          else if (btn.id == 1)
+                            // create location
+                            openDialog(btn.dialogId, { params: { baseType: 'location' } });
+                        } else {
+                          openDialog(btn.dialogId as NoParamDialogIDs);
+                        }
+                      }
+                    "
+                  >
+                    {{ btn.name.value }}
+                    <Shortcut
+                      v-if="btn.shortcut"
+                      class="invisible ml-auto group-hover:visible"
+                      :keys="btn.shortcut.replace('Shift', '⇧').split('+')"
+                    />
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Button variant="ghost" size="icon" :aria-label="$t('global.sign_out')" @click="logout">
+                <MdiLogout />
+              </Button>
+            </div>
+            <nav class="ts-inventory-primary-nav" aria-label="Home Inventory">
+              <NuxtLink
+                v-for="n in nav"
+                :key="n.id"
+                :to="n.to"
+                :aria-current="n.active.value ? 'page' : undefined"
+              >{{ n.name.value }}</NuxtLink>
+            </nav>
+          </header>
 
           <slot />
           <div class="grow" />
@@ -227,6 +234,7 @@
 
 <script lang="ts" setup>
   import { useI18n } from "vue-i18n";
+  import { useMediaQuery, useResizeObserver } from "@vueuse/core";
   import { buildSourceUrl } from "~/lib/brand";
   import { useTagStore } from "~/stores/tags";
   import { useLocationStore } from "~~/stores/locations";
@@ -250,7 +258,6 @@
     SidebarContent,
     SidebarFooter,
     SidebarGroup,
-    SidebarHeader,
     SidebarInset,
     SidebarMenu,
     SidebarMenuSub,
@@ -294,12 +301,23 @@
   const { openDialog } = useDialog();
 
   const preferences = useViewPreferences();
+  const narrowViewport = useMediaQuery("(max-width: 768px)");
+
+  // Keep the existing edit toolbar below the header when text or translations grow.
+  const productHeader = ref<HTMLElement | null>(null);
+  const productHeaderHeight = ref(0);
+  useResizeObserver(productHeader, entries => {
+    productHeaderHeight.value = entries[0]?.target.getBoundingClientRect().height ?? 0;
+  });
 
   // get sidebar state from cookies
   const sidebarState = useCookie("sidebar:state", {
     readonly: true,
     decode: value => value !== "false",
   });
+  const defaultSidebarOpen = computed<boolean>(() =>
+    preferences.value.displayLegacyHeader ? sidebarState.value ?? true : false
+  );
 
   const pubApi = usePublicApi();
   const { data: status } = useAsyncData(async () => {

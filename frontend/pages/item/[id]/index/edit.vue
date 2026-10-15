@@ -655,12 +655,7 @@
 
     <section class="relative">
       <div
-        class="sticky z-10 my-4 flex items-center justify-between gap-2"
-        :class="{
-          'top-[calc(var(--header-height-mobile)+0.25rem)] sm:top-[calc(var(--header-height)+0.25rem)]':
-            !preferences.displayLegacyHeader,
-          'top-1': preferences.displayLegacyHeader,
-        }"
+        class="ts-inventory-edit-toolbar sticky z-10 my-4 flex items-center justify-between gap-2"
       >
         <TooltipProvider :delay-duration="0">
           <Tooltip>

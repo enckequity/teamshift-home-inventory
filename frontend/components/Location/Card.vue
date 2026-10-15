@@ -1,5 +1,5 @@
 <template>
-  <Card>
+  <Card class="ts-inventory-location-card">
     <NuxtLink :to="`/location/${location.id}`" class="group/location-card transition duration-300">
       <div
         :class="{
